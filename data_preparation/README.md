@@ -1,6 +1,6 @@
 ### Data Preparation
 
-Our data preparation process consists of two main components(you can get details from ```data_clean\README.md ``` and ```data_distillaion\README.md```):
+Our data preparation process consists of two main components (you can get details from ```data_clean\README.md ``` and ```data_distillaion\README.md```):
 
 1. **Data Cleaning**  
    We remove erroneous or low-quality cases identified in the original dataset to ensure a cleaner and more reliable training corpus.
