@@ -35,7 +35,7 @@ To filter such cases, we utilize [**Joern**](https://github.com/joernio/joern) t
 
 In original dataset, a function is labeled as "vulnerable" if it was modified in a vulnerability-related commit. However, through analysis, we found that this labeling strategy is often **inaccurate**.
 
-What we aim to identify is the **code snippet that best reflects the CVE (Common Vulnerabilities and Exposures) description**. To improve label quality, we employ large language models (LLMs), specifically **GPT-4o-mini** and **GPT-o4-mini**, to filter the data using the following prompt:
+What we aim to identify is the **code snippet that best reflects the CVE (Common Vulnerabilities and Exposures) description**. To improve label quality, we employ large language models (LLMs), specifically **GPT-4o-mini** and **GPT-4O**, to filter the data using the following prompt:
 
 
 #### (1) Prompt for Data Filtering
@@ -78,8 +78,8 @@ then the code indeed reflects the vulnerability described in CVE.
 
 - For all `func_before` and `func_after` pairs, we first query **GPT-4o-mini** using the above prompt.
     - If `func_before` is judged **vulnerable** and `func_after` **non-vulnerable**, the sample is **kept**.
-- Samples discarded by GPT-4o-mini are then passed to **GPT-o4-mini** for a second round of evaluation using the same prompt.
-    - If GPT-o4-mini meets the same criteria, we **retain** those additional high-quality samples.
+- Samples discarded by GPT-4o-mini are then passed to **GPT-4O** for a second round of evaluation using the same prompt.
+    - If GPT-4O meets the same criteria, we **retain** those additional high-quality samples.
 
 ---
 
