@@ -69,7 +69,42 @@ def get_metrics(data_file,is_GPT=False):
     print(f"P-V: {pair_metric[3]:.4f}\n")
     print(f"P-B: {pair_metric[0]:.4f}\n")
     print(f"P-R: {pair_metric[1]:.4f}\n")
+def get_token_cost(data_file,is_GPT=False):
+    import transformers
+    tokenizer=transformers.AutoTokenizer.from_pretrained("Qwen/Qwen2.5-Coder-7B-Instruct",
+                                                         pad_token='<|extra_0|>',
+                                                         eos_token='<|im_end|>',
+                                                         cache_dir=None,
+                                                         truncation=True,
+                                                         padding_side="right",
+                                                         trust_remote_code=True
+                                                         )
+    tokenizer.add_special_tokens({"additional_special_tokens": ["<|im_end|>", "<|im_start|>"]})
+    print(data_file)
+    accuracy={'before':[0,0],
+    'after':[0,0],
+    'non':[0,0],
+    }
+    if not os.path.exists(data_file):
+        return (0,0)
+    with open(data_file, 'r',encoding="utf-8") as f:
+        datas=f.readlines()
+        for d in datas:
 
+            d=json.loads(d)
+            if d['respond_of_test'] == 'Filtered by policy':
+                continue
+            accuracy[d["type"]][1]+=1
+            p=len(tokenizer.encode(d['respond_of_test'] if not is_GPT else json.loads(d['respond_of_test'])["content"] if d['respond_of_test'] !='Filtered by policy' else d['respond_of_test']))
+            accuracy[d["type"]][0] += p
+    total=0
+    total_number=0
+    for key in accuracy.keys():
+        total+=accuracy[key][0]
+        total_number+=accuracy[key][1]
+        print(f"Token Cost {key}:",accuracy[key][0]/accuracy[key][1])
+
+    print("over all average:",total/total_number)
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description='Get Metrics')
@@ -79,3 +114,4 @@ if __name__=="__main__":
     args = parser.parse_args()
     is_gpt=(args.model.find("gpt")!=-1 or args.model.find("mini") !=-1)
     get_metrics(f"results/{args.type}_test_{args.model}.jsonl",is_gpt)
+    get_token_cost(f"results/{args.type}_test_{args.model}.jsonl",is_gpt)
