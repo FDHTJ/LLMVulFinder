@@ -18,3 +18,15 @@
 
 ## Compute Metrics
 
+- **Compute Accuracy and Pair Metrics**
+    
+    All the result of response from GPT model and our trained model can be found in ```compute_accuracy_and_pair_metrics/results```,
+    And the code to compute the metrics (include majority voting and RVBS) can also be found in ```compute_accuracy_and_pair_metrics```,
+    For majority voting and RVBS, you can simply run the code ```get_metrics_for_majority_voting.py``` and ```get_metrics_for_RVBS.py```.
+    For the response from our trained model and GPT model, you can run like:
+    ```bash
+    python get_metrics.py\
+    --model "qwen-2.5-coder-trained"\
+    --type "our"
+    ```
+    You can check the files under the folder to see all the value of "model".
