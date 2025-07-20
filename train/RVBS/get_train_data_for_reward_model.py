@@ -18,7 +18,7 @@ def batch_generator(data, batch_size):
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--model_path", default='trained_qwen_2.5_coder-7B', type=str)
-parser.add_argument("--method", default='_for_reward_model', type=str)
+parser.add_argument("--method", default='for_reward_model', type=str)
 parser.add_argument("--data_path", default='train_data_for_qwen_coder.json', type=str)
 parser.add_argument("--batch_size", default=1, type=int)
 parser.add_argument("--gpu", default=0, type=int)
