@@ -46,5 +46,6 @@
    --model_name_or_path your_model_path\
    --output_dir your_output_path
    ```
-
-
+5. **Check Point Select**
+   
+   We found that the best-performing checkpoint corresponds to the model trained for one epoch. If you simply run the code without modification, we recommend using checkpoint 420 or 400.
