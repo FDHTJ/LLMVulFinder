@@ -15,5 +15,10 @@ And our final dataset can be found in ```data_preparation/final_data```, and the
 
 ### 3.Train Smaller model
 
-We use our dataset to train the smaller model(parameter size < 10B), and its performance is better than strong baselines. And our trained model can give a better response with less token cost. See the train for language models and RVBS at [Language model](train/language_model/README.md) and [RVBS](train/RVBS/README.md) and the evaluation process is in the folder ```evaluation```.
-For the training and evaluation of LineVul and SVulD, you can turn to the folder ```train/pretrained_model```.
+We use our dataset to train a smaller model (with parameter size < 10B), and its performance outperforms strong baselines. Additionally, our trained model provides better responses with fewer tokens, reducing cost. For details on training the language model , refer to [Language Model](train/language_model/README.md). The evaluation process can be found in the `evaluation` folder.  
+For the training and evaluation of LineVul and SVulD, please refer to the `train/pretrained_model` folder.
+
+### 4.RVBS
+
+We further leverage the scaliing test time to improve the performance of the model, in practice, we use Random-forest Verifier Best-of-N Search to select the best answer.
+Refer to [RVBS](train/RVBS/README.md) to get more details of training RVBS, and find the evaluation of the RVBS in the ```evaluation/compute_accuracy_and_pair_metrics/get_metrics_for_RVBS.py```.
