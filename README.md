@@ -1,6 +1,6 @@
 # LLMVulFinder: Letting Large Language Models Tell All
 
-This paper presents LLMVulFinder, a methodology that enables small LLMs (parameter size < 10B) to effectively identify vulnerable code while providing root-cause explanations
+This paper presents LLMVulFinder, a methodology that enables small LLMs (parameter size < 10B) to effectively identify vulnerable code while providing root-cause explanations.
 Our main contribution are as follows:
 
 ### 1.Provide a Clean Dataset for Vulnerability Detection
@@ -22,3 +22,12 @@ For the training and evaluation of LineVul and SVulD, please refer to the `train
 ### 4.RVBS
 
 We further enhance model performance by scaling test time. In practice, we use Random-Forest Verifier Best-of-N Search to select the best answer. For more details on training RVBS, refer to the [RVBS](train/RVBS/README.md). The evaluation of RVBS can be found in evaluation/compute_accuracy_and_pair_metrics/get_metrics_for_RVBS.py.
+
+### 5. Balanced Metric
+
+Many methods currently evaluate performance using the F1-score; however, their test sets are often highly imbalanced, with safe code making up the majority. This imbalance can significantly affect the F1-score. For example, consider a model that predicts both vulnerable and safe code with 90% accuracy. If there are 100 test examples of each, the true positives (TP) would be 90, false positives (FP) 10, true negatives (TN) 90, and false negatives (FN) 10. This gives a precision of 0.9 (TP / (TP + FP)), recall of 0.9, and an F1-score of 0.9.
+
+However, if the test set consists of 100 vulnerable code examples and 1,000 safe code examples (a more common scenario in some datasets), the TP remains 90, but FP increases to 100, while TN is 900 and FN is still 10. This results in a precision of 0.4737, recall of 0.9, and an F1-score of 0.6207. Clearly, F1-score can be misleading in such imbalanced datasets.
+
+To address this issue, it is important to evaluate the model's performance in a way that is not heavily influenced by the ratio of positive to negative samples. Our analysis shows that, even when the test set changes, the accuracy for both vulnerable and safe code remains stable. We also identified three distinct categories of code: vulnerable, patched, and ordinary. Therefore, we propose using the accuracy across all three types of code, and calculating the harmonic mean of these accuracies as a balanced and stable metric to assess the model's vulnerability detection capability.
+
