@@ -29,5 +29,23 @@ Many methods currently evaluate performance using the F1-score; however, their t
 
 However, if the test set consists of 100 vulnerable code examples and 1,000 safe code examples (a more common scenario in some datasets), the TP remains 90, but FP increases to 100, while TN is 900 and FN is still 10. This results in a precision of 0.4737, recall of 0.9, and an F1-score of 0.6207. Clearly, F1-score can be misleading in such imbalanced datasets.
 
+Even in our case, where the data is only slightly imbalanced (vulnerable vs. non-vulnerable=1:2), we are concerned that the F1-score may fail to capture the model’s actual ability in vulnerability detection. For example, suppose the test set contains 100 vulnerable and 100 non-vulnerable samples. Consider two models:
+Model 1: 50% accuracy on patched code, 60% accuracy on regular code, and 50% accuracy on vulnerable code.
+Model 2: 30% accuracy on patched code, 80% accuracy on regular code, and 50% accuracy on vulnerable code.
+
+
+When computing the F1-score:
+For Model 1: Recall = 0.5, Precision = 50 / (50 + 100 × 0.5 + 100 × 0.4) = 0.357
+For Model 2: Recall = 0.5, Precision = 50 / (50 + 100 × 0.7 + 100 × 0.2) = 0.357
+Both models thus achieve the same recall, precision, and F1-score. However, we argue that Model 1 is more powerful because it better distinguishes complex non-vulnerable code (i.e., patched code).
+
+
+When evaluating with the balanced metric (BM):
+Model 1: BM = 3 / (1/0.5 + 1/0.5 + 1/0.6) = 0.529
+Model 2: BM = 3 / (1/0.5 + 1/0.3 + 1/0.8) = 0.456
+We contend that Model 1 is more valuable, since distinguishing vulnerable from patched code is more indicative of true vulnerability understanding. Nonetheless, we appreciate the suggestion. For completeness, and to facilitate comparison with a broader body of related work, we will include the F1-score in the final version of our paper—alongside our primary metrics and this discussion of its limitations.
+
+
 To address this issue, it is important to evaluate the model's performance in a way that is not heavily influenced by the ratio of positive to negative samples. Our analysis shows that, even when the test set changes, the accuracy for both vulnerable and safe code remains stable. We also identified three distinct categories of code: vulnerable, patched, and ordinary. Therefore, we propose using the accuracy across all three types of code, and calculating the harmonic mean of these accuracies as a balanced and stable metric to assess the model's vulnerability detection capability.
+
 
